@@ -49,6 +49,7 @@ vector<string> read_file(const string filename)
     return lines;
 }
 
+// Convert e.g. 'FBFFFFFRLL' to an int, then compare
 static bool compare_lines(const string &a, const string &b)
 {
     return (row_id_from_string(a) < row_id_from_string(b));
