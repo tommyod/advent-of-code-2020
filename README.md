@@ -7,7 +7,7 @@ The code was written with the purpose of learning basic C++ through a practical 
 
 - [cppreference.com](https://en.cppreference.com/w/)
 - [A Tour of C++](https://www.amazon.com/Tour-2nd-Depth-Bjarne-Stroustrup/dp/0134997832)
-- My colleage [@terjew](https://github.com/terjew/)
+- My colleague [@terjew](https://github.com/terjew/)
 
 ## Notes
 

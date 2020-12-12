@@ -81,7 +81,6 @@ unsigned long long part2(const vector<int> &lines)
         // consists of the sum of the previous 3 available sequences ending in i-1, i-2, i-3
         for (int j = max(0, i - 3); j < i; j++)
         {
-            //cout << i << " " << j <<endl;
             if (connectors.contains(j))
             {
                 connections_ending_in[i] += connections_ending_in[j];
