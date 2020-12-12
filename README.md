@@ -1,14 +1,20 @@
+# Advent of Code 2020
 
+This repository contains my solutions to [Advent of Code 2020](https://adventofcode.com/2020).
+The code was written with the purpose of learning basic C++ through a practical project.
 
-TODO: Build using cmake or premake (byggesystem-generator -> genererer makefil)
-or just use make, scons (Python basert). terje anbefaler premake
+## C++ resources
 
-IDE: qtcreator
+- [cppreference.com](https://en.cppreference.com/w/)
+- [A Tour of C++](https://www.amazon.com/Tour-2nd-Depth-Bjarne-Stroustrup/dp/0134997832)
+- My colleage [@terjew](https://github.com/terjew/)
 
+## Notes
 
-union{
-    int32_t intval;
-    float floatval;
-    uint32_t int_unsigned_val;
-    byte[4] four_bytes;
-} my_type;
+Build using one of:
+
+- cmake
+- premake (build system generator which generates make file) (terje recommends)
+- make
+- scons (Python based)
+- maybe look into qtcreator
