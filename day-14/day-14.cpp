@@ -107,7 +107,7 @@ vector<string> combinations(const string &address)
             continue;
 
         // Split 000X11101X1 into: 000, 11101X1
-        string first = address.substr(0, max(0, i));
+        string first = address.substr(0, i);
         string rest = address.substr(i + 1, address.size() - i - 1);
 
         for (auto tail : combinations(first + "0" + rest))
@@ -158,6 +158,8 @@ T part2(const vector<string> lines)
             memory[stol(memory_key, nullptr, 2)] = memory_value;
         }
     }
+
+    cout << memory.size() << endl;
 
     // Sum every every value in the mapping and return
     return accumulate(memory.begin(), memory.end(), (T)0,
