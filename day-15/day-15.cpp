@@ -14,6 +14,7 @@
 #include <cmath>
 #include <unistd.h>
 #include <cstdlib>
+#include <unordered_map>
 
 using namespace std;
 
@@ -61,14 +62,21 @@ long solve(vector<long> numbers_init, long goal)
 {
 
     vector<long> numbers(goal);
-    map<long, vector<long>> last_seen;
+    unordered_map<long, long> last_seen;
+    set<long> seen;
 
+    // Set up the first numbers
     for (long i = 0; i < numbers_init.size(); i++)
     {
         numbers[i] = numbers_init[i];
-        last_seen[numbers[i]] = {i};
+        last_seen[numbers[i]] = i;
+        if (i != 0)
+        {
+            seen.insert(numbers[i - 1]);
+        }
     }
 
+    // Generate numbers
     for (long i = numbers_init.size(); i < goal; i++)
     {
 
@@ -76,39 +84,22 @@ long solve(vector<long> numbers_init, long goal)
         long this_number;
 
         // If that was the first time the number has been spoken, the current player says 0.
-        if (last_seen[previous_number].size() == 1)
+        if (!seen.contains(previous_number))
         {
             this_number = 0;
+            seen.insert(previous_number);
         }
 
         // Otherwise, the number had been spoken before; the current player announces
         // how many turns apart the number is from when it was previously spoken.
         else
         {
-            vector<long> seen_inds = last_seen[previous_number];
-            this_number = (seen_inds[seen_inds.size() - 1] - seen_inds[seen_inds.size() - 2]);
+            this_number = i - 1 - last_seen[previous_number];
         }
 
+        // Update array as well as last seen time of previous number
         numbers[i] = this_number;
-
-        // Update last seen
-        // Keep only two elements
-        if (last_seen.find(this_number) == last_seen.end())
-        {
-            last_seen[this_number] = {i};
-        }
-        else
-        {
-            if (last_seen[this_number].size() == 1)
-            {
-                last_seen[this_number].push_back(i);
-            }
-            else
-            {
-                last_seen[this_number][0] = last_seen[this_number][1];
-                last_seen[this_number][1] = i;
-            }
-        }
+        last_seen[previous_number] = i - 1;
     }
 
     return numbers[goal - 1];
