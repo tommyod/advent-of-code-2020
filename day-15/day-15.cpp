@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cassert>
 #include <set>
+#include <unordered_set>
 #include <queue>
 #include <numeric>
 #include <regex>
@@ -58,15 +59,16 @@ vector<string> split_string(const string &line, const string delim)
     return output;
 }
 
-long solve(vector<long> numbers_init, long goal)
+template <typename T>
+long solve(vector<T> numbers_init, T goal)
 {
 
-    vector<long> numbers(goal);
-    unordered_map<long, long> last_seen;
-    set<long> seen;
+    vector<T> numbers(goal);
+    unordered_map<T, T> last_seen;
+    unordered_set<T> seen;
 
     // Set up the first numbers
-    for (long i = 0; i < numbers_init.size(); i++)
+    for (T i = 0; i < numbers_init.size(); i++)
     {
         numbers[i] = numbers_init[i];
         last_seen[numbers[i]] = i;
@@ -77,11 +79,11 @@ long solve(vector<long> numbers_init, long goal)
     }
 
     // Generate numbers
-    for (long i = numbers_init.size(); i < goal; i++)
+    for (T i = numbers_init.size(); i < goal; i++)
     {
 
-        long previous_number = numbers[i - 1];
-        long this_number;
+        T previous_number = numbers[i - 1];
+        T this_number;
 
         // If that was the first time the number has been spoken, the current player says 0.
         if (!seen.contains(previous_number))
@@ -110,17 +112,17 @@ int main()
     // Read input data
     auto lines = read_file("day-15-input.txt");
     auto numbers_as_string = split_string(lines[0], ",");
-    vector<long> numbers;
+    vector<int> numbers;
     for (auto number : numbers_as_string)
     {
-        numbers.push_back(stol(number));
+        numbers.push_back(stoi(number));
     }
 
-    auto answer1 = solve(numbers, 2020);
+    auto answer1 = solve<int>(numbers, 2020);
     cout << "Answer to part 1: " << answer1 << endl;
     assert(answer1 == 595);
 
-    auto answer2 = solve(numbers, 30000000);
+    auto answer2 = solve<int>(numbers, 30000000);
     cout << "Answer to part 2: " << answer2 << endl;
     assert(answer2 == 1708310);
 }
