@@ -141,6 +141,128 @@ map<tuple<int, int>, bool> part1(const vector<string> &lines)
     return tile_is_black;
 }
 
+map<tuple<int, int>, bool> set_empty_neighbors_to_white(map<tuple<int, int>, bool> &tile_is_black)
+{
+
+    map<tuple<int, int>, bool> tile_is_black_new;
+    vector<tuple<int, int>> neighbors{
+        {1, 0}, {-1, 0}, {0, 1}, {-1, 1}, {1, -1}, {0, -1}};
+
+    // For each tile
+    for (auto [key, value] : tile_is_black)
+    {
+        auto [x, y] = key;
+
+        // Copy this position
+        tile_is_black_new[key] = tile_is_black[key];
+
+        // For each neighbor
+        for (auto [delta_x, delta_y] : neighbors)
+        {
+            int this_x = x + delta_x;
+            int this_y = y + delta_y;
+
+            // Does not contain the key -> white tile
+            if (!tile_is_black.contains({this_x, this_y}))
+            {
+                tile_is_black_new[{this_x, this_y}] = false;
+            }
+        }
+    }
+
+    return tile_is_black_new;
+}
+
+// Solve part 2
+// This solution is slow, because I add a new layer of white tiles in
+// every iteration. This is not necessary, but it's the simplest way
+// I found to get a correct algorithm working
+int part2(map<tuple<int, int>, bool> &tile_is_black, int simulations = 100)
+{
+
+    vector<tuple<int, int>> neighbors{
+        {1, 0}, {-1, 0}, {0, 1}, {-1, 1}, {1, -1}, {0, -1}};
+
+    // For each day in the simulation
+    for (int simulation = 1; simulation <= simulations; simulation++)
+    {
+
+        // cout << "Simulation " << simulation << endl;
+        // cout << "Tiles in memory: " << tile_is_black.size() << endl;
+
+        tile_is_black = set_empty_neighbors_to_white(tile_is_black);
+        map<tuple<int, int>, bool> tile_is_black_new;
+
+        // For each tile
+        for (auto [key, value] : tile_is_black)
+        {
+            auto [x, y] = key;
+            int black_neighbors = 0;
+            int white_neighbors = 0;
+            //cout << x << " " << y << endl;
+
+            // For each neighbor
+            for (auto [delta_x, delta_y] : neighbors)
+            {
+                int this_x = x + delta_x;
+                int this_y = y + delta_y;
+
+                // Does not contain the key -> white tile
+                if (!tile_is_black.contains({this_x, this_y}))
+                {
+                    white_neighbors++;
+                }
+                else if (!tile_is_black[{this_x, this_y}])
+                {
+                    white_neighbors++;
+                }
+                else if (tile_is_black[{this_x, this_y}])
+                {
+                    black_neighbors++;
+                }
+                else
+                {
+                    assert(false); // should never happen
+                }
+            }
+
+            assert(black_neighbors + white_neighbors == 6);
+
+            // Any black tile with zero or more than 2 black tiles
+            // immediately adjacent to it is flipped to white.
+            if (tile_is_black[{x, y}] && ((black_neighbors == 0) || (black_neighbors > 2)))
+            {
+                tile_is_black_new[{x, y}] = false;
+            }
+
+            // Any white tile with exactly 2 black tiles
+            // immediately adjacent to it is flipped to black.
+            else if ((!tile_is_black[{x, y}]) && (black_neighbors == 2))
+            {
+                tile_is_black_new[{x, y}] = true;
+            }
+            // If neither condition triggered, copy the value unchanged
+            else
+            {
+                tile_is_black_new[{x, y}] = tile_is_black[{x, y}];
+            }
+        }
+
+        // Update for next iteration
+        tile_is_black = tile_is_black_new;
+    }
+
+    int black_tiles = 0;
+    for (auto [key, value] : tile_is_black)
+    {
+        if (value)
+        {
+            black_tiles++;
+        }
+    }
+    return black_tiles;
+}
+
 int main()
 {
 
@@ -169,4 +291,8 @@ int main()
     // =========================================
     // ========= Solve part 2 ==================
     // =========================================
+
+    auto answer2 = part2(tile_is_black, 100);
+    cout << "Answer to part 2: " << answer2 << endl;
+    assert(answer2 == 3551);
 };
