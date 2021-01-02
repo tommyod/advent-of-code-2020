@@ -278,7 +278,6 @@ int main()
     int answer1 = 0;
     for (auto [key, value] : tile_is_black)
     {
-        auto [x, y] = key;
         if (value)
         {
             answer1++;
