@@ -3,6 +3,8 @@
 This repository contains my solutions to [Advent of Code 2020](https://adventofcode.com/2020).
 The code was written with the purpose of learning basic C++ through a practical project.
 
+In the end, I solved 47/50 problems.
+
 ## C++ resources
 
 - [cppreference.com](https://en.cppreference.com/w/)
